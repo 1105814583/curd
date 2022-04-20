@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD程序员</title>
+    <script th:src="@{/static/js/jquery-3.6.0.js}"></script>
+    <link th:href="@{/static/js/bootstrap-3.4.1-dist/css/bootstrap.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .line-margin {
+            margin: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="modal fade" id="add_emp_model" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="exampleModalLabel">添加员工</h2>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    <div class="form-group row">
+                        <label for="empName" class="col-sm-2 col-form-label">name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="empName" placeholder="姓名">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label  class="col-sm-2 col-form-label">gender</label>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="gender1" value="男">
+                                <label class="form-check-label" for="gender1">男</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="gender" id="gender2" value="女">
+                                <label class="form-check-label" for="gender2">女</label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label for="email" class="col-sm-2 col-form-label">email</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="email" placeholder="邮箱">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label  class="col-sm-2 col-form-label">deptName</label>
+                        <div class="col-sm-4">
+                            <select class="form-control" id="deptName">
+                            </select>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <!--标题-->
+    <div class="row">
+        <div class="col-md-12">
+            <h1>专业CRUD程序员</h1>
+        </div>
+    </div>
+    <!--按钮-->
+    <div class="row line-margin">
+        <div class="col-md-4 col-md-offset-8">
+            <button class="btn btn-info" id="add_emp" data-target="add_emp_model">新增</button>
+            <button class="btn btn-danger mt-3" id="del_emp">删除</button>
+        </div>
+
+    </div>
+    <!--数据内容-->
+    <div class="row line-margin">
+        <div class="col-md-12">
+            <table class="table table-hover" id="empTable">
+                <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>gender</th>
+                    <th>email</th>
+                    <th>deptName</th>
+                    <th>操作</th>
+                </tr>
+                <!--                <tr>-->
+                <!--                    <th >#</th>-->
+                <!--                    <th >#</th>-->
+                <!--                    <th >#</th>-->
+                <!--                    <th >#</th>-->
+                <!--                    <th >#</th>-->
+
+                <!--                    <th>-->
+                <!--                        <button class="btn btn-info btn-sm">-->
+                <!--                            <span class="bi bi-pencil-fill"></span>-->
+                <!--                            编辑-->
+                <!--                        </button>-->
+                <!--                        <button class="btn btn-danger btn-sm">-->
+                <!--                            <span class="bi bi-trash3-fill"></span>-->
+                <!--                            删除-->
+                <!--                        </button>-->
+
+                <!--                    </th>-->
+                <!--                </tr>-->
+
+            </table>
+
+        </div>
+
+    </div>
+    <!--分页信息-->
+    <div class="row line-margin">
+        <!--分页数据信息-->
+        <div class="col-md-6" id="page_info">
+
+        </div>
+
+        <!--分页导航-->
+        <div class="col-md-6">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination" id="page_info_nav">
+                    <!--                <li class="page-item"><a class="page-link" >首页</a></li>-->
+                    <!--                <li class="page-item">-->
+                    <!--                    <a class="page-link"  aria-label="Previous">-->
+                    <!--                        <span aria-hidden="true">&laquo;</span>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+
+                    <!--                <li>-->
+                    <!--                    <a href="#" class="page-link" ></a>-->
+                    <!--                </li>-->
+                    <!--                <li class="page-item" >-->
+                    <!--                    <a class="page-link" aria-label="Next">-->
+                    <!--                        <span aria-hidden="true">&raquo;</span>-->
+                    <!--                    </a>-->
+                    <!--                </li>-->
+                    <!--                <li class="page-item"><a class="page-link" >尾页</a></li>-->
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script th:src="@{/static/js/bootstrap-3.4.1-dist/js/bootstrap.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+
+    const contextPath = [[${#httpServletRequest.getContextPath()}]];
+
+    $(function () {
+        load(1);
+    })
+
+    function load(pageNo) {
+        $("#empTable").html("                <tr>\n" +
+            "                    <th>#</th>\n" +
+            "                    <th>name</th>\n" +
+            "                    <th>email</th>\n" +
+            "                    <th>gender</th>\n" +
+            "                    <th>deptName</th>\n" +
+            "                    <th>操作</th>\n" +
+            "                </tr>");
+
+        $("#page_info_nav").html("");
+
+
+        $.ajax({
+            url: contextPath + "/json",
+            data: "pageNo=" + pageNo,
+            type: "get",
+            dataType: "json",
+            success: function (result) {
+                show_emp_info(result);
+                show_page_info(result);
+                show_page_nav(result);
+                add_emp_model();
+            }
+        })
+    }
+
+    function show_emp_info(result) {
+        let emps = result.date.list;
+
+        $.each(emps, function (index, emp) {
+            let empId = $("<td></td>").append(emp.empId);
+            let empName = $("<td></td>").append(emp.empName);
+            let gender = $("<td></td>").append(emp.gender);
+            let email = $("<td></td>").append(emp.email);
+            let deptName = $("<td></td>").append(emp.dept.deptName);
+
+
+            let edit = $("<td></td>").append("<button class=\"btn btn-info btn-sm\">" +
+                "<span class=\"bi bi-pencil-fill\"></span>" +
+                "编辑  " +
+                "</button> ").append("<button class=\"btn btn-danger btn-sm\">" +
+                "<span class=\"bi bi-trash3-fill\"></span>" +
+                " 删除" +
+                "</button>")
+            $("<tr></tr>").append(empId).append(empName).append(gender).append(email).append(deptName).append(edit).appendTo("#empTable")
+        })
+    }
+
+    function show_page_info(result) {
+        $("#page_info").text("当前" + result.date.pageNum + "页,总" + result.date.pages + "页,总" + result.date.total + "条记录")
+    }
+
+    function show_page_nav(result) {
+        let pages = result.date.pages;
+        let pageNum = result.date.pageNum;
+        let nums = result.date.navigatepageNums;
+        let page_nav = $("#page_info_nav");
+        let hasPreviousPage = result.date.hasPreviousPage;
+        let hasNextPage = result.date.hasNextPage;
+
+        let firstPage = $("<li></li>").addClass("page-item").append($("<a></a>").addClass("page-link").text("首页"));
+        let prePage = $("<li></li>").addClass("page-item").append($("<a></a>").addClass("page-link").append($("<span></span>").attr("aria-hidden", "true").append("&laquo;")));
+
+        if (hasPreviousPage == false) {
+            firstPage.addClass("disabled")
+            prePage.addClass("disabled")
+        } else {
+            firstPage.click(function (event) {
+                event.preventDefault();
+                load(1)
+            })
+            prePage.click(function (event) {
+                event.preventDefault();
+                load(pageNum - 1)
+            })
+        }
+        firstPage.appendTo(page_nav)
+        prePage.appendTo(page_nav)
+
+        $.each(nums, function (index, item) {
+            let liTag = $("<li></li>").addClass("page-item").append($("<a></a>").addClass("page-link").attr("href", item).text(item));
+            liTag.click(function (event) {
+                load(item);
+                event.preventDefault()
+            })
+            if (result.date.pageNum === item) {
+                liTag.addClass("active");
+            }
+            liTag.appendTo(page_nav);
+
+        })
+
+
+        let nextPage = $("<li></li>").addClass("page-item").append($("<a></a>").addClass("page-link").append($("<span></span>").attr("aria-hidden", "true").append("&raquo;")));
+        let lastPage = $("<li></li>").addClass("page-item").append($("<a></a>").addClass("page-link").text("尾页"));
+
+        if (hasNextPage == false) {
+            nextPage.addClass("disabled")
+            lastPage.addClass("disabled")
+        } else {
+            nextPage.click(function (event) {
+                load(pageNum + 1)
+                event.preventDefault();
+            })
+            lastPage.click(function (event) {
+                load(pages)
+                event.preventDefault();
+            })
+        }
+        nextPage.appendTo(page_nav);
+        lastPage.appendTo(page_nav);
+
+    }
+
+    function add_emp_model(){
+        $("#add_emp").click(function () {
+            $.ajax({
+                url: contextPath + "/dept/list",
+                type:"get",
+                dataType: "json",
+                success:function (result){
+                    let deptNameEle = $("#deptName");
+                    let date = result.date;
+                    deptNameEle.empty()
+                   $.each(date,function (index,item) {
+                       $("<option></option>").append(item.deptName).attr("value",item.deptId).appendTo(deptNameEle)
+                   })
+
+                }
+
+            })
+
+            $("#add_emp_model").modal({
+                backdrop:"static"
+            })
+
+        })
+
+    }
+
+
+</script>
+
+</body>
+</html>

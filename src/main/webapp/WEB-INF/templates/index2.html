@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUD程序员</title>
+    <script th:src="@{/static/js/jquery-3.6.0.js}"></script>
+    <link th:href="@{/static/js/bootstrap-3.4.1-dist/css/bootstrap.css}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style>
+        .line-margin {
+            margin: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!--标题-->
+    <div class="row">
+        <div class="col-md-12">
+            <h1>专业CRUD程序员</h1>
+        </div>
+    </div>
+    <!--按钮-->
+    <div class="row line-margin">
+        <div class="col-md-4 col-md-offset-8">
+            <button class="btn btn-info">新增</button>
+            <button class="btn btn-danger mt-3">删除</button>
+        </div>
+
+    </div>
+    <!--数据内容-->
+    <div class="row line-margin">
+        <div class="col-md-12">
+            <table class="table table-hover">
+                <tr>
+                    <th>#</th>
+                    <th>name</th>
+                    <th>email</th>
+                    <th>gender</th>
+                    <th>deptName</th>
+                    <th>操作</th>
+                </tr>
+
+                <tr th:each="emp : ${pageInfo.list}">
+                    <th th:text="${emp.empId}"></th>
+                    <th th:text="${emp.empName}"></th>
+                    <th th:text="${emp.gender}"></th>
+                    <th th:text="${emp.email}"></th>
+                    <th th:text="${emp.dept.deptName}"></th>
+                    <th>
+                        <button class="btn btn-info btn-sm">
+                            <span class="bi bi-pencil-fill"></span>
+                            编辑
+                        </button>
+                        <button class="btn btn-danger btn-sm">
+                            <span class="bi bi-trash3-fill"></span>
+                            删除
+                        </button>
+
+                    </th>
+                </tr>
+
+
+            </table>
+
+        </div>
+
+    </div>
+    <!--分页信息-->
+    <div class="row line-margin">
+        <!--分页数据信息-->
+        <div class="col-md-6" th:text="'当前'+${pageInfo.pageNum}+'页,总'+${pageInfo.pages}+'页,总'+${pageInfo.total}+'条记录'">
+
+        </div>
+
+        <!--分页导航-->
+        <div class="col-md-6">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                <li class="page-item"><a class="page-link" th:href="@{/(pageNo = 1)}" >首页</a></li>
+                <li class="page-item" th:if="${pageInfo.hasPreviousPage}">
+                    <a class="page-link" th:href="@{/(pageNo = ${pageInfo.pageNum - 1})}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li  th:each="navigatepageNum : ${pageInfo.navigatepageNums}" th:class="${pageInfo.pageNum == navigatepageNum?'page-item active':'page-item'}">
+                    <a th:href="@{/(pageNo =${navigatepageNum})}"  th:if="${pageInfo.pageNum} eq ${navigatepageNum}" class="page-link" th:text="${navigatepageNum}"></a>
+                    <a th:href="@{/(pageNo =${navigatepageNum})}"  th:if="${pageInfo.pageNum} ne ${navigatepageNum}" class="page-link" th:text="${navigatepageNum}"></a>
+                </li>
+                <!--                    <li class="page-item"><a class="page-link" href="#"  th:if="pageInfo.pageNo ne ${navigatepageNum}" th:text="${navigatepageNum}"></a></li>-->
+                <li class="page-item" th:if="${pageInfo.hasNextPage}">
+                    <a class="page-link" th:href="@{/(pageNo = ${pageInfo.pageNum + 1})}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item"><a class="page-link" th:href="@{/(pageNo = ${pageInfo.pages})}">尾页</a></li>
+                </ul>
+            </nav>
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<script th:src="@{/static/js/bootstrap-3.4.1-dist/js/bootstrap.js}"></script>
+<!--<script >-->
+<!--    $(function (){-->
+<!--        let $lis = $(".page-item");-->
+<!--        for (let $li in $lis) {-->
+<!--            $li.click=changePageNum(this.value);-->
+<!--        }-->
+<!--    })-->
+
+<!--    function changePageNum(pageNum){-->
+<!--        $.get({-->
+<!--            url:"/",-->
+<!--            param:pageNum-->
+
+<!--        })-->
+
+<!--    }-->
+
+
+
+
+<!--</script>-->
+
+</body>
+</html>
